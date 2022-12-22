@@ -19,3 +19,9 @@ export type ColumnProps = {
 export type ItemType = {
   id: number;
 };
+
+export type ColumnItem = {
+  id: number;
+  title: string;
+  tasks: number[];
+};

@@ -1,20 +1,46 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import { ColumnProps } from "../types";
-import Item from "./Card";
+import Card from "./Card";
 
 export default function Column({ title, tasks, id }: ColumnProps) {
   return (
-    <div className="w-72 h-fit shrink-0 rounded-md bg-gray-100 ">
-      <div className="font-bold rounded-t-md p-2">{title}</div>
-      <div className="p-2">
-        {tasks.map((task, index) => (
-          <Item task={task} key={index} />
-        ))}
-        <div className="text-gray-500">
-          <FontAwesomeIcon icon={faPlus} /> Add a card
+    <Droppable droppableId={`${id}`}>
+      {(droppableProvided, droppableSnapshot) => (
+        <div
+          className={"p-2"}
+          ref={droppableProvided.innerRef}
+          {...droppableProvided.droppableProps}
+        >
+          <div className="w-72 h-fit shrink-0 rounded-md bg-gray-100 ">
+            <div className="font-bold rounded-t-md p-2">{title}</div>
+            <div className="p-2">
+              {tasks.map((task, index) => (
+                <Draggable
+                  key={task.id}
+                  draggableId={`${task.id}`}
+                  index={index}
+                >
+                  {(draggableProvided, draggableSnapshot) => (
+                    <div
+                      className="mb-2 last:mb-0 bg-white p-2 rounded-md w-full"
+                      ref={draggableProvided.innerRef}
+                      {...draggableProvided.draggableProps}
+                      {...draggableProvided.dragHandleProps}
+                    >
+                      <Card task={task} key={index} />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              <div className="text-gray-500">
+                <FontAwesomeIcon icon={faPlus} /> Add a card
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </Droppable>
   );
 }
