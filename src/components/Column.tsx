@@ -9,7 +9,7 @@ export default function Column({ title, tasks, id }: ColumnProps) {
     <Droppable droppableId={`${id}`}>
       {(droppableProvided, droppableSnapshot) => (
         <div
-          className={"p-2"}
+          className="p-2"
           ref={droppableProvided.innerRef}
           {...droppableProvided.droppableProps}
         >
@@ -24,7 +24,12 @@ export default function Column({ title, tasks, id }: ColumnProps) {
                 >
                   {(draggableProvided, draggableSnapshot) => (
                     <div
-                      className="mb-2 last:mb-0 bg-white p-2 rounded-md w-full"
+                      className={
+                        "mb-2 last:mb-0 bg-white p-2 rounded-md w-full outline outline-2" +
+                        (draggableSnapshot.isDragging
+                          ? " outline-gray-300"
+                          : " outline-transparent")
+                      }
                       ref={draggableProvided.innerRef}
                       {...draggableProvided.draggableProps}
                       {...draggableProvided.dragHandleProps}
@@ -34,6 +39,7 @@ export default function Column({ title, tasks, id }: ColumnProps) {
                   )}
                 </Draggable>
               ))}
+              {droppableProvided.placeholder}
               <div className="text-gray-500">
                 <FontAwesomeIcon icon={faPlus} /> Add a card
               </div>

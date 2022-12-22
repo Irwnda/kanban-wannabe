@@ -66,15 +66,82 @@ function App() {
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
+
+    if (!destination) return;
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    )
+      return;
+
+    const sourceCol = columns.find(
+      (col) => col.id.toString() === source.droppableId
+    ) as ColumnItem;
+    const destCol = columns.find(
+      (col) => `${col.id}` === destination.droppableId
+    ) as ColumnItem;
+
+    if (sourceCol === destCol) {
+      const newTaskIds = Array.from(sourceCol.tasks);
+      const [removed] = newTaskIds.splice(source.index, 1);
+      newTaskIds.splice(destination.index, 0, removed);
+
+      const newCol = {
+        ...sourceCol,
+        tasks: newTaskIds,
+      };
+      setColumns((prev) =>
+        prev.map((col) => (col.id === sourceCol.id ? newCol : col))
+      );
+      return;
+    }
+
+    const sourceTaskIds = Array.from(sourceCol.tasks);
+    const [removed] = sourceTaskIds.splice(source.index, 1);
+    const newSourceColumn = {
+      ...sourceCol,
+      tasks: sourceTaskIds,
+    };
+
+    const destTaskIds = Array.from(destCol.tasks);
+    destTaskIds.splice(destination.index, 0, removed);
+    const newDestColumn = {
+      ...destCol,
+      tasks: destTaskIds,
+    };
+
+    setColumns((prev) =>
+      prev.map((col) => (col.id === newSourceColumn.id ? newSourceColumn : col))
+    );
+    setColumns((prev) =>
+      prev.map((col) => (col.id === newDestColumn.id ? newDestColumn : col))
+    );
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="container mx-auto bg-white">
         <div className="font-bold text-center text-xl p-2">Your Board</div>
         <Board>
-          <Column title="To Do" tasks={[]} id={1} />
-          <Column title="In Progress" tasks={[]} id={2} />
-          <Column title="Done" tasks={tasks} id={3} />
+          {columnOrder.map((columnId) => {
+            var taskList = [] as Task[];
+            columns[columnId].tasks.forEach((taskId) => {
+              tasks.forEach((task) => {
+                if (task.id === taskId) {
+                  taskList.push(task);
+                }
+              });
+            });
+
+            return (
+              <Column
+                key={columnId}
+                id={columnId}
+                title={columns[columnId].title}
+                tasks={taskList}
+              />
+            );
+          })}
         </Board>
       </div>
     </DragDropContext>
