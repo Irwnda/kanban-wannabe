@@ -2,7 +2,7 @@ import { Task } from "../types";
 
 function Item({ task }: { task: Task }) {
   return (
-    <div className="gap-2 flex flex-col">
+    <div className={"flex flex-col" + (task.tags.length > 0 ? " gap-2" : "")}>
       <div className="flex gap-1 w-full flex-wrap">
         {task.tags.map((tag, index) => (
           <div
@@ -13,7 +13,7 @@ function Item({ task }: { task: Task }) {
           </div>
         ))}
       </div>
-      {task.description}
+      {task.title}
     </div>
   );
 }

@@ -25,3 +25,12 @@ export type ColumnItem = {
   title: string;
   tasks: number[];
 };
+
+export type AppContextType = {
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  columns: ColumnItem[];
+  setColumns: React.Dispatch<React.SetStateAction<ColumnItem[]>>;
+  columnOrder: number[];
+  setColumnOrder: React.Dispatch<React.SetStateAction<number[]>>;
+};
