@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import { ColumnItem, Task } from "./types";
-import { Board, Column } from "./components";
+import { Board, Column, Modal } from "./components";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { AppContext } from "./AppContext";
 import {

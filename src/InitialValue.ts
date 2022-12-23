@@ -37,13 +37,37 @@ const InitialTasks: Task[] = [
     title: "Task 6",
     tags: ["tag1", "tag2"],
   },
+  {
+    id: 7,
+    description: "Task 7",
+    title: "Task 7",
+    tags: ["tag1", "tag2"],
+  },
+  {
+    id: 8,
+    description: "Task 8",
+    title: "Task 8",
+    tags: ["tag1", "tag2"],
+  },
+  {
+    id: 9,
+    description: "Task 9",
+    title: "Task 9",
+    tags: ["tag1", "tag2"],
+  },
+  {
+    id: 10,
+    description: "Task 10",
+    title: "Task 10",
+    tags: ["tag1", "tag2"],
+  },
 ];
 
 const InitialColumns: ColumnItem[] = [
   {
     id: 0,
     title: "TO-DO",
-    tasks: [1, 2, 3, 4, 5, 6],
+    tasks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   },
   {
     id: 1,

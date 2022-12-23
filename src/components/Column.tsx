@@ -15,6 +15,7 @@ export default function Column({ id }: { id: number }) {
   const [isEditing, setIsEditing] = React.useState(false);
   const [title, setTitle] = React.useState(columns[id].title);
   const [currentTasks, setCurrenttask] = React.useState<Task[]>([]);
+  const [disableDrag, setDisableDrag] = React.useState(false);
 
   const divRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
@@ -77,6 +78,7 @@ export default function Column({ id }: { id: number }) {
                   key={task.id}
                   draggableId={`${task.id}`}
                   index={index}
+                  isDragDisabled={disableDrag}
                 >
                   {(draggableProvided, draggableSnapshot) => (
                     <div
@@ -90,7 +92,11 @@ export default function Column({ id }: { id: number }) {
                       {...draggableProvided.draggableProps}
                       {...draggableProvided.dragHandleProps}
                     >
-                      <Card task={task} key={index} />
+                      <Card
+                        task={task}
+                        key={index}
+                        setDisableDrag={setDisableDrag}
+                      />
                     </div>
                   )}
                 </Draggable>
