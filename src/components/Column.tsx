@@ -1,10 +1,15 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { ColumnProps } from "../types";
 import Card from "./Card";
 
 export default function Column({ title, tasks, id }: ColumnProps) {
+  const [inputValue, setInputValue] = React.useState("");
+  const inputRef = React.useRef<HTMLTextAreaElement>(null);
+  const [isEditing, setIsEditing] = React.useState(false);
+
   return (
     <Droppable droppableId={`${id}`}>
       {(droppableProvided, droppableSnapshot) => (
@@ -40,8 +45,35 @@ export default function Column({ title, tasks, id }: ColumnProps) {
                 </Draggable>
               ))}
               {droppableProvided.placeholder}
-              <div className="text-gray-500">
+              <textarea
+                ref={inputRef}
+                className="rounded-sm p-2 w-full hidden"
+                onBlur={() => {
+                  inputRef.current?.classList.add("hidden");
+                  setInputValue("");
+                  setIsEditing(false);
+                }}
+                onFocus={() => setIsEditing(true)}
+                placeholder="Enter a title for this card..."
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+              ></textarea>
+              <button
+                className={"text-gray-500" + (isEditing ? " hidden" : "")}
+                onClick={() => {
+                  inputRef.current?.classList.remove("hidden");
+                  inputRef.current?.focus();
+                }}
+              >
                 <FontAwesomeIcon icon={faPlus} /> Add a card
+              </button>
+              <div className={"flex" + (isEditing ? "" : " hidden")}>
+                <button className="bg-blue-500 text-white rounded-md px-2">
+                  Save
+                </button>
+                <button className="ml-2 bg-transparent text-gray-300 hover:text-gray-400">
+                  <FontAwesomeIcon icon={faTimes} size="lg" />
+                </button>
               </div>
             </div>
           </div>
