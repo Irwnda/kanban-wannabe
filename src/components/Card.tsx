@@ -17,11 +17,8 @@ function Item({
 
   return (
     <>
-      <div
-        className={"flex flex-col" + (task.tags.length > 0 ? " gap-2" : "")}
-        onClick={() => setIsModalOpen(true)}
-      >
-        <div className="flex gap-1 w-full flex-wrap">
+      <div className={"flex flex-col"} onClick={() => setIsModalOpen(true)}>
+        {/* <div className="flex gap-1 w-full flex-wrap">
           {task.tags.map((tag, index) => (
             <div
               key={index}
@@ -30,7 +27,7 @@ function Item({
               {tag}
             </div>
           ))}
-        </div>
+        </div> */}
         {task.title}
       </div>
       <Modal
