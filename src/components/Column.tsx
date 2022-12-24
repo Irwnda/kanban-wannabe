@@ -22,6 +22,7 @@ export default function Column({ id }: { id: number }) {
   const saveBtnRef = React.useRef<HTMLButtonElement>(null);
 
   React.useEffect(() => {
+    console.log(columns[id].color.bg);
     var taskList = [] as Task[];
     columns[id].tasks.forEach((taskId) => {
       tasks.forEach((task) => {
@@ -44,6 +45,7 @@ export default function Column({ id }: { id: number }) {
       title: inputValue,
       description: "",
       tags: [],
+      progress: 0,
     };
     setCurrenttask((prev) => [...prev, newTask]);
     setTasks((prev) => [...prev, newTask]);
@@ -70,9 +72,32 @@ export default function Column({ id }: { id: number }) {
           ref={droppableProvided.innerRef}
           {...droppableProvided.droppableProps}
         >
-          <div className="w-72 h-fit shrink-0 rounded-md bg-gray-100 ">
-            <div className="font-bold rounded-t-md p-2">{title}</div>
-            <div className="p-2">
+          <div
+            className="w-72 h-fit shrink-0 rounded-md p-3"
+            style={{
+              backgroundColor: columns[id].color.bg,
+              border: `1px solid ${columns[id].color.border}`,
+            }}
+          >
+            <div
+              className="font-normal w-fit rounded text-xs px-2"
+              style={{
+                color: columns[id].color.border,
+                border: `2px solid ${columns[id].color.borderInside}`,
+                backgroundColor: columns[id].color.bgInside,
+              }}
+            >
+              {title}
+            </div>
+            <div className="text-sm font-medium mt-1">
+              {columns[id].startPeriod} - {columns[id].endPeriod}
+            </div>
+            <div className="mt-3">
+              {currentTasks.length === 0 ? (
+                <Card task={null} setDisableDrag={setDisableDrag} />
+              ) : (
+                <></>
+              )}
               {currentTasks.map((task, index) => (
                 <Draggable
                   key={task.id}
@@ -83,7 +108,7 @@ export default function Column({ id }: { id: number }) {
                   {(draggableProvided, draggableSnapshot) => (
                     <div
                       className={
-                        "mb-2 last:mb-0 bg-white p-2 rounded-md w-full outline outline-2" +
+                        "mb-2 bg-white p-2 rounded-md w-full outline outline-2" +
                         (draggableSnapshot.isDragging
                           ? " outline-gray-300"
                           : " outline-transparent")
@@ -122,13 +147,13 @@ export default function Column({ id }: { id: number }) {
                   onChange={(e) => setInputValue(e.target.value)}
                 ></textarea>
                 <button
-                  className={"text-gray-500" + (isEditing ? " hidden" : "")}
+                  className={isEditing ? " hidden" : ""}
                   onClick={() => {
                     inputRef.current?.classList.remove("hidden");
                     inputRef.current?.focus();
                   }}
                 >
-                  <FontAwesomeIcon icon={faPlus} /> Add a card
+                  <FontAwesomeIcon icon={faPlus} /> New Task
                 </button>
                 <div className={"flex" + (isEditing ? "" : " hidden")}>
                   <button

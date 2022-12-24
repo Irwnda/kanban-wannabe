@@ -1,8 +1,21 @@
+type Enumerate<
+  N extends number,
+  Acc extends number[] = []
+> = Acc["length"] extends N
+  ? Acc[number]
+  : Enumerate<N, [...Acc, Acc["length"]]>;
+
+type IntRange<F extends number, T extends number> = Exclude<
+  Enumerate<T>,
+  Enumerate<F>
+>;
+
 export type Task = {
   id: number;
   title: string;
   description: string;
   tags: string[];
+  progress: IntRange<0, 101>;
 };
 
 export const ITEM_TYPE = {
@@ -24,6 +37,9 @@ export type ColumnItem = {
   id: number;
   title: string;
   tasks: number[];
+  color: ColumnColor;
+  startPeriod: string;
+  endPeriod: string;
 };
 
 export type AppContextType = {
@@ -33,4 +49,11 @@ export type AppContextType = {
   setColumns: React.Dispatch<React.SetStateAction<ColumnItem[]>>;
   columnOrder: number[];
   setColumnOrder: React.Dispatch<React.SetStateAction<number[]>>;
+};
+
+export type ColumnColor = {
+  border: string;
+  borderInside: string;
+  bg: string;
+  bgInside: string;
 };

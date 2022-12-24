@@ -72,7 +72,7 @@ function App() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="container mx-auto bg-white">
-        <div className="font-bold text-center text-xl p-2">Your Board</div>
+        <div className="font-bold text-3xl p-2">Product Roadmap</div>
         <AppContext.Provider
           value={{
             tasks,
