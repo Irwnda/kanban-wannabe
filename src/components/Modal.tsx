@@ -1,6 +1,6 @@
 import React from "react";
 import { AppContext } from "../AppContext";
-import { AppContextType } from "../types";
+import { AppContextType, Task } from "../types";
 
 export default function Modal({
   id,
@@ -17,13 +17,14 @@ export default function Modal({
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [newTitle, setNewTitle] = React.useState("");
   const [newDescription, setNewDescription] = React.useState("");
+  const [newProgress, setNewProgress] = React.useState<Task["progress"]>(0);
 
   React.useEffect(() => {
     tasks.forEach((task, index) => {
       if (task.id === parseInt(id)) {
         setCurrentIndex(index);
         setNewTitle(task.title);
-        setNewDescription(task.description);
+        setNewProgress(task.progress);
       }
     });
   }, [tasks, id]);
@@ -35,7 +36,7 @@ export default function Modal({
           return {
             ...task,
             title: newTitle,
-            description: newDescription,
+            progress: newProgress,
           };
         }
         return task;
@@ -63,14 +64,10 @@ export default function Modal({
       <div className="flex w-full h-full justify-center items-center">
         <div className="relative w-full h-full max-w-2xl md:h-auto">
           <div className="relative bg-white rounded-lg shadow">
-            <div className="flex items-start justify-between p-4 border-b rounded-t">
-              <input
-                type="text"
-                className="w-full p-2 rounded-md text-xl font-semibold text-gray-900"
-                placeholder="Enter a title for this card..."
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-              />
+            <div className="flex items-start justify-between p-4 rounded-t">
+              <div className="w-full p-2 rounded-md text-xl font-semibold text-gray-900">
+                Edit Task
+              </div>
               <button
                 type="button"
                 className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
@@ -92,29 +89,51 @@ export default function Modal({
                 <span className="sr-only">Close modal</span>
               </button>
             </div>
-            <div className="px-6 py-4 space-y-2">
-              <h4 className="font-semibold text-gray-900">Description</h4>
-              <textarea
-                value={newDescription}
-                onChange={(e) => setNewDescription(e.target.value)}
-                rows={3}
-                className="w-full"
-              ></textarea>
+            <div className="px-6 space-y-2">
+              <h4 className="font-normal text-gray-900">Task Name</h4>
+              <input
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                className="w-full p-2 outline outline-gray-400 rounded-md"
+              />
+              <h4 className="font-normal text-gray-900">Progress</h4>
+              <div className="outline outline-gray-400 w-fit p-2 rounded-md">
+                <span>
+                  <input
+                    value={newProgress}
+                    type="number"
+                    min={0}
+                    max={100}
+                    onChange={(e) => {
+                      e.target.value = (+e.target.value).toString();
+                      if (
+                        Number(e.target.value) >= 0 &&
+                        Number(e.target.value) <= 100
+                      )
+                        setNewProgress(
+                          Number(e.target.value) as Task["progress"]
+                        );
+                    }}
+                    className="w-8 focus:outline-none"
+                  />
+                  %
+                </span>
+              </div>
             </div>
-            <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
+            <div className="flex justify-end items-center p-6 space-x-2 rounded-b">
+              <button
+                onClick={() => setOpenModal(false)}
+                type="button"
+                className="text-[#262626] bg-white outline-gray-400 outline focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                Cancel
+              </button>
               <button
                 onClick={() => handleChanges()}
                 type="button"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className="text-white bg-green-500 outline-green-500 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm font-medium px-5 py-2.5 focus:z-10"
               >
-                Confirm
-              </button>
-              <button
-                onClick={() => handleDelete()}
-                type="button"
-                className="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 focus:z-10"
-              >
-                Delete
+                Save Task
               </button>
             </div>
           </div>
